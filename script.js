@@ -9,6 +9,8 @@ document.addEventListener('DOMContentLoaded', function() {
 let nearestTimerSeconds = Number.MAX_SAFE_INTEGER;
 let finishedTimersCount = 0;
 
+const maxBarSeconds = 86400;
+
 function addTimer() {
     const days = parseInt(document.getElementById('daysInput').value) || 0;
     const hours = parseInt(document.getElementById('hoursInput').value) || 0;
@@ -127,7 +129,7 @@ function createTimerElement(seconds, color, icon) {
         const currentTime = Date.now();
         const remainingTime = endTime - currentTime;
         const remainingSeconds = Math.max(0, Math.floor(remainingTime / 1000));
-        const percentage = Math.max(0, (remainingTime / (seconds * 1000)) * 100);
+        const percentage = Math.max(0, (remainingTime / (maxBarSeconds * 1000)) * 100);
 
         progressBar.style.width = percentage + '%';
         timeString.textContent = `${formatTime(remainingSeconds)}`;
