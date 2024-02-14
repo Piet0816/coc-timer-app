@@ -1,5 +1,9 @@
 document.getElementById('addTimer').addEventListener('click', addTimer);
 
+document.addEventListener('DOMContentLoaded', function() {
+    loadTimersState();
+});
+
 // Add global variables to track the nearest timer and finished count
 let nearestTimerSeconds = Number.MAX_SAFE_INTEGER;
 let finishedTimersCount = 0;
@@ -17,6 +21,8 @@ function addTimer() {
     } else {
         alert("Please enter a valid time greater than 0.");
     }
+	
+	saveTimersState();
 }
 
 function updateNearestTimerDisplay() {
@@ -78,6 +84,12 @@ function createTimerElement(seconds, color, icon) {
     // Start the countdown
     const startTime = Date.now();
     const endTime = startTime + (seconds * 1000);
+	
+	timerElement.setAttribute('data-start-time', startTime.toString());
+    timerElement.setAttribute('data-seconds', seconds.toString());
+    timerElement.setAttribute('data-color', color);
+    timerElement.setAttribute('data-icon', icon);
+	
     const interval = setInterval(() => {
         const currentTime = Date.now();
         const remainingTime = endTime - currentTime;
@@ -97,12 +109,7 @@ function createTimerElement(seconds, color, icon) {
 			timerElement.setAttribute('data-seconds', remainingSeconds); // Add this line
 			updateNearestTimerDisplay(); // Add this line
 		}
-
-        if (remainingTime <= 0) {
-            clearInterval(interval);
-            progressBar.style.width = `0%`;
-            moveToCompleted(timerElement, color, icon);
-        }
+     
     }, 1000);
 }
 
@@ -132,7 +139,7 @@ function moveToCompleted(timerElement, color, icon) {
 
     // Create a span to display the completion text
     const completionText = document.createElement('span');
-    completionText.textContent = `Completed at: ${new Date().toLocaleTimeString()}`;
+    completionText.textContent = `Completed at: ${new Date().toLocaleTimeString()} Base: ${color}   `;
 
     // Add the existing icon from the timer to the completed container
     const iconElement = timerElement.querySelector('.icon').cloneNode(true);
@@ -205,3 +212,37 @@ function resetTabTitleIfNoTimers() {
     }
 }
 
+function saveTimersState() {
+    const timers = Array.from(document.querySelectorAll('.timer')).map(timer => {
+        return {
+            startTime: timer.getAttribute('data-start-time'),
+            seconds: timer.getAttribute('data-seconds'),
+            maxTime: timer.getAttribute('data-max-time'),
+            color: timer.getAttribute('data-color'),
+            icon: timer.getAttribute('data-icon') // This should be the key for the icon
+        };
+    });
+    localStorage.setItem('timers', JSON.stringify(timers));
+	console.log('Saving timers:', timers);
+}
+
+
+function loadTimersState() {
+    const savedTimers = JSON.parse(localStorage.getItem('timers')) || [];
+    savedTimers.forEach(savedTimer => {
+        const now = Date.now();
+        const elapsed = (now - parseInt(savedTimer.startTime)) / 1000;
+        const remainingSeconds = Math.max(0, parseInt(savedTimer.seconds) - elapsed);
+        if (remainingSeconds > 0) {
+            createTimerElement(remainingSeconds, savedTimer.color, savedTimer.icon); // 'savedTimer.icon' is the key
+            // After creating the timer, you may need to update its progress bar and other attributes
+        }
+    });
+}
+
+function resetAndDeleteSave() {
+    localStorage.removeItem('timers');
+    document.getElementById('timersList').innerHTML = ''; // Clear the timers list
+    document.getElementById('completedTimers').innerHTML = ''; // Clear the completed timers
+    // Reset any other state here as needed
+}
