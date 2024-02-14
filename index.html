@@ -5,7 +5,10 @@
     <link rel="stylesheet" type="text/css" href="style.css">
 </head>
 <body>
+	<h2>Completed:</h2>
+    <div id="completedTimers"></div>
     <h1>CoC Timer</h1>
+	
     <input type="number" id="daysInput" placeholder="D" min="0">
     <input type="number" id="hoursInput" placeholder="H" min="0" max="23">
     <input type="number" id="minutesInput" placeholder="M" min="0" max="59">
@@ -25,8 +28,7 @@
     <button id="addTimer">Add Timer</button>
 	<button id="resetButton" onclick="resetAndDeleteSave()">Reset All</button>
     <div id="timersList"></div>
-    <h2>Completed:</h2>
-    <div id="completedTimers"></div>
+    
 
     <script src="script.js"></script>
 </body>

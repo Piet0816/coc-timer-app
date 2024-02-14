@@ -105,6 +105,7 @@ function createTimerElement(seconds, color, icon) {
         // This will remove the timer from the DOM
         timersList.removeChild(timerElement);
         // Here you can also add any other cleanup code if needed (e.g., clearing intervals)
+		saveTimersState();
     });
 
     // Append the remove button to the timer element
@@ -212,6 +213,7 @@ function moveToCompleted(timerElement, color, icon) {
 		completedTimers.removeChild(completedContainer);
 		finishedTimersCount = 0; // Decrement the finished timers count
 		resetTabTitleIfNoTimers();
+		saveTimersState();
 	};
     completedContainer.appendChild(dismissBtn);
 
@@ -295,7 +297,24 @@ function loadTimersState() {
         if (remainingSeconds > 0) {
             createTimerElement(remainingSeconds, savedTimer.color, savedTimer.icon); // 'savedTimer.icon' is the key
             // After creating the timer, you may need to update its progress bar and other attributes
-        }
+        }else {
+            // Timer has expired, move directly to completed
+            // Create a dummy element to satisfy moveToCompleted parameters if needed
+            const dummyTimerElement = document.createElement('div');
+            dummyTimerElement.classList.add('timer');
+            dummyTimerElement.setAttribute('data-color', savedTimer.color);
+            dummyTimerElement.setAttribute('data-icon', savedTimer.icon);
+
+            // Create a dummy icon element for visual consistency in completed section
+           const iconElement = document.createElement('img');
+			iconElement.src = getIconPath(savedTimer.icon);
+			iconElement.alt = savedTimer.icon;
+			iconElement.classList.add('icon'); // Make sure this matches your querySelector in moveToCompleted
+			dummyTimerElement.appendChild(iconElement);
+
+
+            moveToCompleted(dummyTimerElement, savedTimer.color, savedTimer.icon);
+		}
     });
 }
 
@@ -321,4 +340,5 @@ function removeTimer(timerId) {
         timer.remove();
     }
     // If you're saving the timers, you would also remove it from the save data here
+	saveTimersState();
 }
