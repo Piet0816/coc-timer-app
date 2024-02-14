@@ -56,6 +56,12 @@ button:hover {
     background-color: #555; /* Darken button on hover for visual feedback */
 }
 
+.completion-time {
+    display: block; /* or inline-block, depending on your layout */
+    margin-top: 5px; /* Add some space above the completion time */
+    font-size: 0.8em; /* You can adjust the size as you see fit */
+    color: #ddd; /* Just an example, adjust the color as needed */
+}
 
 h1 {
     text-align: center;

@@ -70,9 +70,13 @@ function createTimerElement(seconds, color, icon) {
     timeString.classList.add('time-string');
     detailsContainer.appendChild(timeString);
 
+    // Create a span for the completion time and add it to the details container
+    const completionTimeElement = document.createElement('span');
+    completionTimeElement.classList.add('completion-time');
+    detailsContainer.appendChild(completionTimeElement);
+
     // Add the details container to the timer element
     timerElement.appendChild(detailsContainer);
-
 
     // Create progress bar container and progress bar
     const progressContainer = document.createElement('div');
@@ -94,9 +98,6 @@ function createTimerElement(seconds, color, icon) {
     // Append the timer to the list
     timersList.appendChild(timerElement);
 
-   // Add the progress bar container to the timer element
-    timerElement.appendChild(progressContainer);
-
     // Create a button to remove the timer
     const removeButton = document.createElement('button');
     removeButton.textContent = 'X';
@@ -113,12 +114,19 @@ function createTimerElement(seconds, color, icon) {
     // Append the remove button to the timer element
     timerElement.appendChild(removeButton);
 
+	const completionTime = new Date(Date.now() + seconds * 1000);
+	const options = { weekday: 'short', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' };
+	completionTimeElement.textContent = `${completionTime.toLocaleString(undefined, options)}`;
+
     // Append the timer to the list
     timersList.appendChild(timerElement);
 
     // Start the countdown
     const startTime = Date.now();
     const endTime = startTime + (seconds * 1000);
+
+    // Store the formatted completion time in a data attribute
+    timerElement.setAttribute('data-completion-time', completionTime.toLocaleString());
 	
 	timerElement.setAttribute('data-start-time', startTime.toString());
     timerElement.setAttribute('data-seconds', seconds.toString());
@@ -139,6 +147,7 @@ function createTimerElement(seconds, color, icon) {
 			 // Play the beep sound when the timer finishes
 			clearInterval(interval);
 			progressBar.style.width = `0%`;
+			completionTimeElement.textContent = `Ended`;
 			moveToCompleted(timerElement, color, icon);
 			updateNearestTimerDisplay(); // Add this line
 		} else {
@@ -279,8 +288,7 @@ function saveTimersState() {
     const timers = Array.from(document.querySelectorAll('.timer')).map(timer => {
         return {
             startTime: timer.getAttribute('data-start-time'),
-            seconds: timer.getAttribute('data-seconds'),
-            maxTime: timer.getAttribute('data-max-time'),
+            seconds: timer.getAttribute('data-seconds'),         
             color: timer.getAttribute('data-color'),
             icon: timer.getAttribute('data-icon') // This should be the key for the icon
         };
@@ -313,7 +321,6 @@ function loadTimersState() {
 			iconElement.alt = savedTimer.icon;
 			iconElement.classList.add('icon'); // Make sure this matches your querySelector in moveToCompleted
 			dummyTimerElement.appendChild(iconElement);
-
 
             moveToCompleted(dummyTimerElement, savedTimer.color, savedTimer.icon);
 		}
