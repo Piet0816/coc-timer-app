@@ -2,6 +2,7 @@ document.getElementById('addTimer').addEventListener('click', addTimer);
 
 document.addEventListener('DOMContentLoaded', function() {
     loadTimersState();
+	sortTimersByRemainingTime();
 });
 
 // Add global variables to track the nearest timer and finished count
@@ -21,6 +22,8 @@ function addTimer() {
     } else {
         alert("Please enter a valid time greater than 0.");
     }
+	
+	sortTimersByRemainingTime();
 	
 	saveTimersState();
 }
@@ -43,6 +46,7 @@ function updateNearestTimerDisplay() {
 
 
 function createTimerElement(seconds, color, icon) {
+
     const timersList = document.getElementById('timersList');
     const timerElement = document.createElement('div');
     timerElement.classList.add('timer');
@@ -67,6 +71,7 @@ function createTimerElement(seconds, color, icon) {
     // Add the details container to the timer element
     timerElement.appendChild(detailsContainer);
 
+
     // Create progress bar container and progress bar
     const progressContainer = document.createElement('div');
     progressContainer.classList.add('progress-container');
@@ -75,8 +80,35 @@ function createTimerElement(seconds, color, icon) {
     progressBar.style.width = '0%'; // Start with 0% width
     progressContainer.appendChild(progressBar);
 
+	// Create a text element for the color key
+    const colorKey = document.createElement('span');
+    colorKey.classList.add('color-key');
+    colorKey.textContent = color; // Set the text content to the color key
+    progressContainer.appendChild(colorKey); // Append the color key to the progress container
+
     // Add the progress bar container to the timer element
     timerElement.appendChild(progressContainer);
+
+    // Append the timer to the list
+    timersList.appendChild(timerElement);
+
+   // Add the progress bar container to the timer element
+    timerElement.appendChild(progressContainer);
+
+    // Create a button to remove the timer
+    const removeButton = document.createElement('button');
+    removeButton.textContent = 'X';
+    removeButton.classList.add('remove-timer-btn');
+    
+    // Set an event listener on the button to handle the click event
+    removeButton.addEventListener('click', function() {
+        // This will remove the timer from the DOM
+        timersList.removeChild(timerElement);
+        // Here you can also add any other cleanup code if needed (e.g., clearing intervals)
+    });
+
+    // Append the remove button to the timer element
+    timerElement.appendChild(removeButton);
 
     // Append the timer to the list
     timersList.appendChild(timerElement);
@@ -101,6 +133,7 @@ function createTimerElement(seconds, color, icon) {
 
 		// Inside your createTimerElement function within the setInterval callback:
 		if (remainingTime <= 0) {
+			 // Play the beep sound when the timer finishes
 			clearInterval(interval);
 			progressBar.style.width = `0%`;
 			moveToCompleted(timerElement, color, icon);
@@ -128,6 +161,29 @@ function getIconPath(iconName) {
     const filename = iconMapping[iconName] || 'default';
     return `./icons/${filename}.png`;
 }
+
+function sortTimersByRemainingTime() {
+    const timersList = document.getElementById('timersList');
+    const timerElements = Array.from(timersList.querySelectorAll('.timer'));
+
+    // Sort timer elements by remaining time
+    timerElements.sort((a, b) => {
+        const remainingTimeA = parseInt(a.getAttribute('data-seconds'));
+        const remainingTimeB = parseInt(b.getAttribute('data-seconds'));
+        return remainingTimeA - remainingTimeB;
+    });
+
+    // Remove all timer elements from the list
+    while (timersList.firstChild) {
+        timersList.removeChild(timersList.firstChild);
+    }
+
+    // Re-append sorted timer elements to the list
+    timerElements.forEach(timerElement => {
+        timersList.appendChild(timerElement);
+    });
+}
+
 
 function moveToCompleted(timerElement, color, icon) {
     const completedTimers = document.getElementById('completedTimers');
@@ -167,6 +223,9 @@ function moveToCompleted(timerElement, color, icon) {
 
     // Finally, remove the original timer from the timers list
     timerElement.remove();
+	
+		const beepSound = new Audio('./audio/beep.mp3'); 
+		beepSound.play();
 }
 
 function updateProgressBar(progressBar, startTime, totalSeconds) {
@@ -241,8 +300,25 @@ function loadTimersState() {
 }
 
 function resetAndDeleteSave() {
-    localStorage.removeItem('timers');
-    document.getElementById('timersList').innerHTML = ''; // Clear the timers list
-    document.getElementById('completedTimers').innerHTML = ''; // Clear the completed timers
-    // Reset any other state here as needed
+    // Display a confirmation dialog
+    const confirmation = confirm("Are you sure you want to reset and delete the saved timers?");
+    
+    // Check if the user confirmed
+    if (confirmation) {
+        // User confirmed, proceed with resetting and deleting
+        localStorage.removeItem('timers');
+        document.getElementById('timersList').innerHTML = ''; // Clear the timers list
+        document.getElementById('completedTimers').innerHTML = ''; // Clear the completed timers
+        // Reset any other state here as needed
+    } else {
+        // User cancelled, do nothing
+    }
+}
+
+function removeTimer(timerId) {
+    var timer = document.getElementById(timerId);
+    if (timer) {
+        timer.remove();
+    }
+    // If you're saving the timers, you would also remove it from the save data here
 }

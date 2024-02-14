@@ -6,9 +6,9 @@
 </head>
 <body>
     <h1>CoC Timer</h1>
-    <input type="number" id="daysInput" placeholder="Days" min="0">
-    <input type="number" id="hoursInput" placeholder="Hours" min="0" max="23">
-    <input type="number" id="minutesInput" placeholder="Minutes" min="0" max="59">
+    <input type="number" id="daysInput" placeholder="D" min="0">
+    <input type="number" id="hoursInput" placeholder="H" min="0" max="23">
+    <input type="number" id="minutesInput" placeholder="M" min="0" max="59">
     <select id="colorSelect">
         <option value="0814">0814</option>
         <option value="0816">0816</option>
@@ -23,7 +23,7 @@
         <option value="pet">Pet</option>
     </select>
     <button id="addTimer">Add Timer</button>
-	<button id="resetButton" onclick="resetAndDeleteSave()">Reset and Delete Save</button>
+	<button id="resetButton" onclick="resetAndDeleteSave()">Reset All</button>
     <div id="timersList"></div>
     <h2>Completed:</h2>
     <div id="completedTimers"></div>

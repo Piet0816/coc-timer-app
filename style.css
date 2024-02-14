@@ -1,7 +1,61 @@
+/* Color Definitions */
+:root {
+    --salmon: #874f09;
+    --sea-green: #09874a;
+    --light-steel-blue: #093787;
+    --slate-gray: #778899;
+}
+
 /* General Styles */
 body {
     font-family: Arial, sans-serif;
+    background-color: #444; /* Dark background color */
+    color: #eee; /* Text color for good contrast */
 }
+
+/* Set a specific width for input fields */
+input[type="number"] {
+    width: 120px; /* You can adjust the width as needed */
+    padding: 10px;
+    margin: 5px 0;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #333;
+    color: white;
+    /* To ensure the box-sizing includes padding and border in the width */
+    box-sizing: border-box;
+}
+
+/* Adjust the select width to match the input fields if necessary */
+select {
+    width: calc(80px + 20px); /* Adjust the width calculation if needed */
+    padding: 10px;
+    margin: 5px 0;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #333;
+    color: white;
+    /* To ensure the box-sizing includes padding and border in the width */
+    box-sizing: border-box;
+}
+
+/* Add margin to buttons */
+button {
+    padding: 10px 20px; /* Increase padding */
+    margin: 15px; /* Add margin around buttons */
+    font-size: 1rem; /* Increase font size */
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #555; /* Darken button on hover for visual feedback */
+}
+
 
 h1 {
     text-align: center;
@@ -15,17 +69,20 @@ h1 {
 .timer {
     display: flex;
     align-items: center;
-    margin-bottom: 10px;
+    margin-bottom: 5px;
     padding: 5px;
     border-radius: 4px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    background-color: #444; /* Darker timer background */
 }
 
 .details-container {
     display: flex;
     align-items: center;
-	flex-wrap: wrap; /* Allow items to wrap if needed */
-    margin-right: 10px; /* Space between details and progress bar */
+    flex-wrap: wrap;
+    margin-right: 10px;
+    flex: 0 0 180px; /* Adjust the width as needed */
+    text-align: right; /* Align the text to the right */
 }
 
 .icon {
@@ -35,24 +92,27 @@ h1 {
 }
 
 .time-string {
-    flex: 1 0 120px; /* Grow to fill space, don't shrink, start with 120px width */
-    margin-right: 10px; /* Space before progress bar */
-    white-space: nowrap; /* Keep the text on one line */
+    flex: 1 0 120px;
+    margin-right: 10px;
+    white-space: nowrap;
 }
 
 .progress-container {
     display: flex;
     align-items: center;
-    flex-grow: 2; /* Allow the progress bar to fill remaining space */
-    flex-basis: 0; /* Start with the smallest size possible */
-    background-color: #ddd; /* Background of the progress bar */
+    flex-grow: 2;
+    flex-basis: 0;
+    background-color: #555; /* Darker progress bar background */
     border-radius: 4px;
     overflow: hidden;
-    width: 100%; /* Full width to parent */
+    width: 100%;
+    position: relative; /* Added for positioning color key */
+	flex: 1; /* Take the remaining space */
+    margin-left: 10px; /* Add some space between text and progress bar */
 }
 
 .progress-bar {
-    height: 20px;
+    height: 30px;
     border-radius: 4px;
     width: 0%;
     transition: width 0.5s ease;
@@ -63,75 +123,105 @@ h1 {
     margin-top: 20px;
 }
 
-.completed-info {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+/* Improve visibility of the dismiss button */
+.dismiss-btn {
+    background-color: #fff; /* Make the button white or any color that stands out */
+    color: #000; /* Text color for the button, use a contrasting color */
+    border: none; /* Remove border if not needed */
+    padding: 5px 10px; /* Adjust padding to ensure the button is not too large or too small */
+    border-radius: 4px; /* Optional: if you want rounded corners on the button */
+    opacity: 0.7; /* Optional: make the button slightly transparent */
+    transition: opacity 0.3s; /* Smooth transition for the opacity */
 }
 
-.dismiss-btn {
-    margin-left: 10px;
-    cursor: pointer;
+.dismiss-btn:hover {
+    opacity: 1; /* Full opacity on hover */
 }
+
+/* Align the icon with the text */
+.icon {
+    display: inline-block; /* Make sure the icon is inline with text */
+    vertical-align: middle; /* Align it vertically in the middle */
+    margin-right: 10px; /* Adjust spacing between the icon and the text */
+}
+
+/* Style for the completed timers */
+.completed-info {
+    align-items: center; /* This ensures vertical alignment for flex items */
+    background-color: var(--salmon); /* Adjust the background color to match the design */
+    color: #eee; /* Ensure the text color contrasts well with the background */
+    padding: 10px; /* Add padding inside the completed info box */
+    border-radius: 4px; /* Match the border-radius with other elements if necessary */
+}
+
 
 /* Color Options for Progress Bars */
 .timer[data-color="0814"] .progress-bar {
-    background-color: #FFA07A; /* Light Salmon */
+    background-color: var(--salmon);
 }
 
 .timer[data-color="0816"] .progress-bar {
-    background-color: #B0C4DE; /* Light Sea Green */
+    background-color: var(--light-steel-blue);
 }
 
 .timer[data-color="0817"] .progress-bar {
-    background-color: #20B2AA; /* Light Slate Gray */
+    background-color: var(--sea-green);
 }
 
 .timer[data-color="0818"] .progress-bar {
-    background-color: #778899; /* Light Steel Blue */
-}
-
-.completed-info[data-color="0814"] {
-    background-color: #FFA07A; /* Light Salmon */
-}
-
-.completed-info[data-color="0816"] {
-    background-color: #B0C4DE; /*  Light Steel Blue */
-}
-
-.completed-info[data-color="0817"] {
-    background-color: #20B2AA; /* Light Sea Green */
-}
-
-.completed-info[data-color="0818"] {
-    background-color: #778899; /* Light Slate Gray */
+    background-color: var(--slate-gray);
 }
 
 /* Style for completed timers with background color */
 .completed-timer[data-color] {
-    /* Apply background colors based on data-color attribute */
-    background-color: #ddd; /* default color, can be changed */
+    background-color: #666; /* Darker completed timer background */
 }
 
 .completed-timer[data-color="0814"] {
-    background-color: #FFA07A;
+    background-color: var(--salmon);
 }
 
 .completed-timer[data-color="0816"] {
-    background-color: #B0C4DE;
+    background-color: var(--light-steel-blue);
 }
 
 .completed-timer[data-color="0817"] {
-    background-color: #20B2AA;
+    background-color: var(--sea-green);
 }
 
 .completed-timer[data-color="0818"] {
-    background-color: #778899;
+    background-color: var(--slate-gray);
 }
 
-/* ... other styles ... */
+/* Text Colors for Good Visibility */
+.timer,
+.completed-info {
+    color: #eee; /* Set text color to white for good visibility */
+}
 
 .dismiss-btn {
-    margin-left: auto; /* Push the button to the right */
+    color: #eee; /* Set button color to white for good visibility */
+}
+
+.color-key {
+    position: absolute;
+    top: 50%;
+    left: 5px; /* Adjust as needed */
+    transform: translateY(-50%);
+    font-size: 12px; /* Adjust as needed */
+    color: #eee; /* Adjust the color */
+}
+
+.remove-timer-btn {
+    padding: 5px 10px;
+    margin-left: 10px;
+    background-color: #ff4d4d; /* Red color for removal indication */
+    color: white;
+    border: none;
+    border-radius: 4px;
     cursor: pointer;
+}
+
+.remove-timer-btn:hover {
+    background-color: #ff6666; /* Lighter red on hover */
 }
