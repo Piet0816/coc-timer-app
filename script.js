@@ -50,6 +50,10 @@ function addTimer() {
         alert("Please enter a valid time greater than 0.");
     }
 	
+	document.getElementById('daysInput').value = '';
+	document.getElementById('hoursInput').value = '';
+	document.getElementById('minutesInput').value = '';
+	
 	toggleCompletedHeader();
 	
 	sortTimersByRemainingTime();
