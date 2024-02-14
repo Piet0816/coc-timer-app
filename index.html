@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>CoC Timer</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+    <h1>CoC Timer</h1>
+    <input type="number" id="daysInput" placeholder="Days" min="0">
+    <input type="number" id="hoursInput" placeholder="Hours" min="0" max="23">
+    <input type="number" id="minutesInput" placeholder="Minutes" min="0" max="59">
+    <select id="colorSelect">
+        <option value="0814">0814</option>
+        <option value="0816">0816</option>
+        <option value="0817">0817</option>
+        <option value="0818">0818</option>
+    </select>
+    <select id="iconSelect">
+        <option value="house">Mainbase</option>
+        <option value="worker">Builderbase</option>
+        <option value="laboratory">Laboratory</option>
+        <option value="crown">Hero</option>
+        <option value="pet">Pet</option>
+    </select>
+    <button id="addTimer">Add Timer</button>
+    <div id="timersList"></div>
+    <h2>Completed:</h2>
+    <div id="completedTimers"></div>
+
+    <script src="script.js"></script>
+</body>
+</html>
+

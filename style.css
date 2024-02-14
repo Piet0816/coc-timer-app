@@ -1,0 +1,137 @@
+/* General Styles */
+body {
+    font-family: Arial, sans-serif;
+}
+
+h1 {
+    text-align: center;
+}
+
+#timersList {
+    margin-top: 20px;
+}
+
+/* Timer Styles */
+.timer {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    padding: 5px;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.details-container {
+    display: flex;
+    align-items: center;
+	flex-wrap: wrap; /* Allow items to wrap if needed */
+    margin-right: 10px; /* Space between details and progress bar */
+}
+
+.icon {
+    width: 30px;
+    height: 30px;
+    margin-right: 10px;
+}
+
+.time-string {
+    flex: 1 0 120px; /* Grow to fill space, don't shrink, start with 120px width */
+    margin-right: 10px; /* Space before progress bar */
+    white-space: nowrap; /* Keep the text on one line */
+}
+
+.progress-container {
+    display: flex;
+    align-items: center;
+    flex-grow: 2; /* Allow the progress bar to fill remaining space */
+    flex-basis: 0; /* Start with the smallest size possible */
+    background-color: #ddd; /* Background of the progress bar */
+    border-radius: 4px;
+    overflow: hidden;
+    width: 100%; /* Full width to parent */
+}
+
+.progress-bar {
+    height: 20px;
+    border-radius: 4px;
+    width: 0%;
+    transition: width 0.5s ease;
+}
+
+/* Completed Timers Styles */
+#completedTimers {
+    margin-top: 20px;
+}
+
+.completed-info {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.dismiss-btn {
+    margin-left: 10px;
+    cursor: pointer;
+}
+
+/* Color Options for Progress Bars */
+.timer[data-color="0814"] .progress-bar {
+    background-color: #FFA07A; /* Light Salmon */
+}
+
+.timer[data-color="0816"] .progress-bar {
+    background-color: #B0C4DE; /* Light Sea Green */
+}
+
+.timer[data-color="0817"] .progress-bar {
+    background-color: #20B2AA; /* Light Slate Gray */
+}
+
+.timer[data-color="0818"] .progress-bar {
+    background-color: #778899; /* Light Steel Blue */
+}
+
+.completed-info[data-color="0814"] {
+    background-color: #FFA07A; /* Light Salmon */
+}
+
+.completed-info[data-color="0816"] {
+    background-color: #B0C4DE; /*  Light Steel Blue */
+}
+
+.completed-info[data-color="0817"] {
+    background-color: #20B2AA; /* Light Sea Green */
+}
+
+.completed-info[data-color="0818"] {
+    background-color: #778899; /* Light Slate Gray */
+}
+
+/* Style for completed timers with background color */
+.completed-timer[data-color] {
+    /* Apply background colors based on data-color attribute */
+    background-color: #ddd; /* default color, can be changed */
+}
+
+.completed-timer[data-color="0814"] {
+    background-color: #FFA07A;
+}
+
+.completed-timer[data-color="0816"] {
+    background-color: #B0C4DE;
+}
+
+.completed-timer[data-color="0817"] {
+    background-color: #20B2AA;
+}
+
+.completed-timer[data-color="0818"] {
+    background-color: #778899;
+}
+
+/* ... other styles ... */
+
+.dismiss-btn {
+    margin-left: auto; /* Push the button to the right */
+    cursor: pointer;
+}
