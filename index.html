@@ -5,7 +5,7 @@
     <link rel="stylesheet" type="text/css" href="style.css">
 </head>
 <body>
-	<h2>Completed:</h2>
+    <h2>Completed:</h2>
     <div id="completedTimers"></div>
     <h1>CoC Timer</h1>
 	
@@ -26,11 +26,20 @@
         <option value="pet">Pet</option>
     </select>
     <button id="addTimer">Add Timer</button>
-	<button id="resetButton" onclick="resetAndDeleteSave()">Reset All</button>
+	
+	<!-- Toggle Button -->
+    <button id="toggleSpecialButtons">More...</button>
+
+    <!-- Special Buttons and JSON TextField -->
+    <div id="specialButtonsContainer" style="display: none;">
+	     <button id="resetButton" onclick="resetAndDeleteSave()">Reset All</button>
+        <button id="getJsonButton" onclick="exportToJson()">Export Data</button>
+        <button id="setJsonButton" onclick="importFromJson()">Import Data</button>
+        <textarea id="jsonTextField" placeholder="JSON data..."></textarea>
+    </div>
+
     <div id="timersList"></div>
-    
 
     <script src="script.js"></script>
 </body>
 </html>
-

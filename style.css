@@ -56,6 +56,15 @@ button:hover {
     background-color: #555; /* Darken button on hover for visual feedback */
 }
 
+#jsonTextField {
+    width: 100%; /* or any specific width, such as 400px */
+    height: 150px; /* adjust the height as needed */
+    padding: 8px; /* add some internal padding */
+    box-sizing: border-box; /* include padding and border in the element's total width and height*/
+	font-size: 16px; /* or any size you prefer */
+    color: black; /* this sets the text color to black */
+}
+
 .completion-time {
     display: block; /* or inline-block, depending on your layout */
     margin-top: 5px; /* Add some space above the completion time */

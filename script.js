@@ -5,6 +5,18 @@ document.addEventListener('DOMContentLoaded', function() {
 	sortTimersByRemainingTime();
 });
 
+document.getElementById('toggleSpecialButtons').addEventListener('click', function() {
+    var specialButtonsContainer = document.getElementById('specialButtonsContainer');
+	 var toggleButton = document.getElementById('toggleSpecialButtons');
+    if (specialButtonsContainer.style.display === 'none') {
+        specialButtonsContainer.style.display = 'block';
+		 toggleButton.textContent = 'Less..'; 
+    } else {
+        specialButtonsContainer.style.display = 'none';
+		 toggleButton.textContent = 'More..'; 
+    }
+});
+
 // Add global variables to track the nearest timer and finished count
 let nearestTimerSeconds = Number.MAX_SAFE_INTEGER;
 let finishedTimersCount = 0;
@@ -158,6 +170,29 @@ function createTimerElement(seconds, color, icon) {
     }, 1000);
 } 
 
+
+function exportToJson() {
+    // Retrieve the timers data from localStorage
+    const timersData = localStorage.getItem('timers'); // Replace 'timers' with your actual localStorage key
+    // Set the data to the textarea
+    document.getElementById('jsonTextField').value = timersData;
+}
+
+function importFromJson() {
+    // Get the data from the textarea
+    const jsonData = document.getElementById('jsonTextField').value;
+	console.log('timers:', jsonData);
+    try {
+        // Parse the JSON data to ensure it is valid
+        const timersData = JSON.parse(jsonData);
+        // Store the parsed data in localStorage
+        localStorage.setItem('timers', jsonData); // Replace 'timers' with your actual localStorage key
+        // Reload the timers from the stored data
+        loadTimersState(); // You'll need to implement this function based on how your app loads timers
+    } catch(e) {
+        alert('Invalid JSON data');
+    }
+}
 
 // Function to map the icon name to the corresponding PNG file
 function getIconPath(iconName) {
