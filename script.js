@@ -147,7 +147,7 @@ function createTimerElement(seconds, color, icon) {
 		}
      
     }, 1000);
-}
+} 
 
 
 // Function to map the icon name to the corresponding PNG file
