@@ -187,6 +187,18 @@ h1 {
     background-color: var(--slate-gray);
 }
 
+.timer[data-color="account0"] .progress-bar { background-color: #e6194B; }
+.timer[data-color="account1"] .progress-bar { background-color: #3cb44b; }
+.timer[data-color="account2"] .progress-bar { background-color: #ffe119; }
+.timer[data-color="account3"] .progress-bar { background-color: #4363d8; }
+.timer[data-color="account4"] .progress-bar { background-color: #f58231; }
+.timer[data-color="account5"] .progress-bar { background-color: #911eb4; }
+.timer[data-color="account6"] .progress-bar { background-color: #46f0f0; }
+.timer[data-color="account7"] .progress-bar { background-color: #f032e6; }
+.timer[data-color="account8"] .progress-bar { background-color: #bcf60c; }
+.timer[data-color="account9"] .progress-bar { background-color: #fabebe; }
+
+
 /* Style for completed timers with background color */
 .completed-timer[data-color] {
     background-color: #666; /* Darker completed timer background */
@@ -239,4 +251,21 @@ h1 {
 
 .remove-timer-btn:hover {
     background-color: #ff6666; /* Lighter red on hover */
+}
+
+#colorSelect option[value="account0"] { background-color: #e6194B; color: white; } /* Assuming white text for contrast */
+#colorSelect option[value="account1"] { background-color: #3cb44b; color: white; }
+#colorSelect option[value="account2"] { background-color: #ffe119; color: black; }
+#colorSelect option[value="account3"] { background-color: #4363d8; color: white; }
+#colorSelect option[value="account4"] { background-color: #f58231; color: black; }
+#colorSelect option[value="account5"] { background-color: #911eb4; color: white; }
+#colorSelect option[value="account6"] { background-color: #46f0f0; color: black; }
+#colorSelect option[value="account7"] { background-color: #f032e6; color: white; }
+#colorSelect option[value="account8"] { background-color: #bcf60c; color: black; }
+#colorSelect option[value="account9"] { background-color: #fabebe; color: black; }
+#colorSelect option[value="0814"] { background-color: #874f09; color: white; }
+#colorSelect option[value="0816"] { background-color: #093787; color: white; }
+#colorSelect option[value="0817"] { background-color: #09874a; color: white; }
+#colorSelect option[value="0818"] { background-color: #778899; color: white; }
+
 }
