@@ -3,6 +3,7 @@ document.getElementById('addTimer').addEventListener('click', addTimer);
 document.addEventListener('DOMContentLoaded', function() {
     loadTimersState();
 	sortTimersByRemainingTime();
+	toggleCompletedHeader();
 });
 
 document.getElementById('toggleSpecialButtons').addEventListener('click', function() {
@@ -23,6 +24,18 @@ let finishedTimersCount = 0;
 
 const maxBarSeconds = 86400;
 
+function toggleCompletedHeader() {
+    const completedItemsContainer = document.getElementById('completedTimers');
+    const completedHeader = document.getElementById('completedHeader');
+    
+    // Check if there are any completed items
+    if (completedItemsContainer.children.length > 0) {
+        completedHeader.style.display = 'block'; // Show the header
+    } else {
+        completedHeader.style.display = 'none'; // Hide the header
+    }
+}
+
 function addTimer() {
     const days = parseInt(document.getElementById('daysInput').value) || 0;
     const hours = parseInt(document.getElementById('hoursInput').value) || 0;
@@ -36,6 +49,8 @@ function addTimer() {
     } else {
         alert("Please enter a valid time greater than 0.");
     }
+	
+	toggleCompletedHeader();
 	
 	sortTimersByRemainingTime();
 	
@@ -121,6 +136,7 @@ function createTimerElement(seconds, color, icon) {
         timersList.removeChild(timerElement);
         // Here you can also add any other cleanup code if needed (e.g., clearing intervals)
 		saveTimersState();
+		toggleCompletedHeader();
     });
 
     // Append the remove button to the timer element
@@ -260,6 +276,7 @@ function moveToCompleted(timerElement, color, icon) {
 		finishedTimersCount = 0; // Decrement the finished timers count
 		resetTabTitleIfNoTimers();
 		saveTimersState();
+		toggleCompletedHeader();
 	};
     completedContainer.appendChild(dismissBtn);
 
@@ -274,6 +291,8 @@ function moveToCompleted(timerElement, color, icon) {
 	
 		const beepSound = new Audio('./audio/beep.mp3'); 
 		beepSound.play();
+		
+		toggleCompletedHeader();
 }
 
 function updateProgressBar(progressBar, startTime, totalSeconds) {
