@@ -15,7 +15,7 @@ body {
 
 /* Set a specific width for input fields */
 input[type="number"] {
-    width: 120px; /* You can adjust the width as needed */
+    width: 100px; /* You can adjust the width as needed */
     padding: 10px;
     margin: 5px 0;
     font-size: 1rem;
@@ -29,7 +29,7 @@ input[type="number"] {
 
 /* Adjust the select width to match the input fields if necessary */
 select {
-    width: calc(80px + 20px); /* Adjust the width calculation if needed */
+    width: calc(120px + 50px); /* Adjust the width calculation if needed */
     padding: 10px;
     margin: 5px 0;
     font-size: 1rem;
