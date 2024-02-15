@@ -448,7 +448,7 @@ function countTimersByColorAndCategory() {
         const color = timer.getAttribute('data-color');
         const category = timer.getAttribute('data-icon');
         const key = `${color}-${category}`;
-console.log(color, category, key);
+
         if (key in colorCategoryCounts) {
             colorCategoryCounts[key]++;
         } else {
@@ -461,6 +461,7 @@ console.log(color, category, key);
 
 
 function updateColorCounters() {
+	
     const colorCategoryCounts = countTimersByColorAndCategory();
     const countersContainer = document.getElementById('colorCountersContainer');
 
@@ -481,7 +482,7 @@ function updateColorCounters() {
     });
 
     // Then, create and append the counters
-    Object.keys(colorCounters).forEach(color => {
+    Object.keys(colorCounters).sort().forEach(color => {
         const counterSpan = document.createElement('span');
         counterSpan.classList.add('color-counter');
         const colorClass = color.startsWith('account') ? color : `account${color}`;
