@@ -249,6 +249,23 @@ h1 {
     cursor: pointer;
 }
 
+#colorCountersContainer {
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    margin-left: 20px; /* Adjust as needed */
+}
+
+.color-counter {
+    margin-right: 10px;
+    padding: 5px 10px;
+    border-radius: 5px;
+    background-color: #f2f2f2; /* Light grey background, adjust if you have specific colors */
+    color: #333; /* Dark text for contrast */
+    font-weight: bold;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Optional: adds subtle shadow for depth */
+}
+
 .remove-timer-btn:hover {
     background-color: #ff6666; /* Lighter red on hover */
 }
@@ -268,4 +285,21 @@ h1 {
 #colorSelect option[value="0817"] { background-color: #09874a; color: white; }
 #colorSelect option[value="0818"] { background-color: #778899; color: white; }
 
+.account0 { background-color: #e6194B; color: white; }
+.account1 { background-color: #3cb44b; color: white; }
+.account2 { background-color: #ffe119; color: black; }
+.account3 { background-color: #4363d8; color: white; }
+.account4 { background-color: #f58231; color: black; }
+.account5 { background-color: #911eb4; color: white; }
+.account6 { background-color: #46f0f0; color: black; }
+.account7 { background-color: #f032e6; color: white; }
+.account8 { background-color: #bcf60c; color: black; }
+.account9 { background-color: #fabebe; color: black; }
+.account0814 { background-color: #874f09; color: white; }
+.account0816 { background-color: #093787; color: white; }
+.account0817 { background-color: #09874a; color: white; }
+.account0818 { background-color: #778899; color: white; }
+
+
 }
+

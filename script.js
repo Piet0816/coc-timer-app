@@ -4,6 +4,7 @@ document.addEventListener('DOMContentLoaded', function() {
     loadTimersState();
 	sortTimersByRemainingTime();
 	toggleCompletedHeader();
+	updateColorCounters();
 });
 
 document.getElementById('toggleSpecialButtons').addEventListener('click', function() {
@@ -360,6 +361,7 @@ function saveTimersState() {
     });
     localStorage.setItem('timers', JSON.stringify(timers));
 	console.log('Saving timers:', timers);
+	updateColorCounters();
 }
 
 
@@ -409,6 +411,7 @@ function resetAndDeleteSave() {
     } else {
         // User cancelled, do nothing
     }
+	updateColorCounters();
 }
 
 function removeTimer(timerId) {
@@ -419,3 +422,42 @@ function removeTimer(timerId) {
     // If you're saving the timers, you would also remove it from the save data here
 	saveTimersState();
 }
+
+
+function countTimersByColor() {
+    const timers = Array.from(document.querySelectorAll('.timer'));
+    const colorCounts = {};
+
+    timers.forEach(timer => {
+        const color = timer.getAttribute('data-color');
+        if (color in colorCounts) {
+            colorCounts[color]++;
+        } else {
+            colorCounts[color] = 1;
+        }
+    });
+
+    return colorCounts;
+}
+
+
+function updateColorCounters() {
+    const colorCounts = countTimersByColor();
+    const countersContainer = document.getElementById('colorCountersContainer');
+
+    countersContainer.innerHTML = ''; // Clear the current counters
+
+    Object.keys(colorCounts).forEach(color => {
+        if (colorCounts[color] > 0) {
+            const counterSpan = document.createElement('span');
+            counterSpan.textContent = `${color}: ${colorCounts[color]}`;
+            counterSpan.classList.add('color-counter');
+            // Correctly add class based on the `color` attribute value
+			const colorClass = color.startsWith('account') ? color : `account${color}`;
+			counterSpan.classList.add('color-counter', colorClass);
+			// Apply the color class
+            countersContainer.appendChild(counterSpan);
+        }
+    });
+}
+
