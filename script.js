@@ -336,7 +336,7 @@ function formatTime(seconds) {
 function updateTabTitle(nearestTimeSeconds, finishedCount) {
     if (finishedCount > 0) {
         document.title = `${finishedCount} tasks finished`;
-    } else if (nearestTime) {
+    } else if (nearestTimeSeconds) {
         document.title = `Next: ${formatTime(nearestTimeSeconds)}`;
     } else {
         document.title = "CoC Timer";
@@ -424,40 +424,70 @@ function removeTimer(timerId) {
 }
 
 
-function countTimersByColor() {
+function countTimersByColorAndCategory() {
     const timers = Array.from(document.querySelectorAll('.timer'));
-    const colorCounts = {};
+    const colorCategoryCounts = {};
 
     timers.forEach(timer => {
         const color = timer.getAttribute('data-color');
-        if (color in colorCounts) {
-            colorCounts[color]++;
+        const category = timer.getAttribute('data-icon');
+        const key = `${color}-${category}`;
+console.log(color, category, key);
+        if (key in colorCategoryCounts) {
+            colorCategoryCounts[key]++;
         } else {
-            colorCounts[color] = 1;
+            colorCategoryCounts[key] = 1;
         }
     });
 
-    return colorCounts;
+    return colorCategoryCounts;
 }
 
 
 function updateColorCounters() {
-    const colorCounts = countTimersByColor();
+    const colorCategoryCounts = countTimersByColorAndCategory();
     const countersContainer = document.getElementById('colorCountersContainer');
 
     countersContainer.innerHTML = ''; // Clear the current counters
 
-    Object.keys(colorCounts).forEach(color => {
-        if (colorCounts[color] > 0) {
-            const counterSpan = document.createElement('span');
-            counterSpan.textContent = `${color}: ${colorCounts[color]}`;
-            counterSpan.classList.add('color-counter');
-            // Correctly add class based on the `color` attribute value
-			const colorClass = color.startsWith('account') ? color : `account${color}`;
-			counterSpan.classList.add('color-counter', colorClass);
-			// Apply the color class
-            countersContainer.appendChild(counterSpan);
+    const colorCounters = {};
+
+    // First, organize counts by color
+    Object.keys(colorCategoryCounts).forEach(key => {
+        const [color, category] = key.split('-');
+        if (!colorCounters[color]) {
+            colorCounters[color] = {};
         }
+        if (!colorCounters[color][category]) {
+            colorCounters[color][category] = 0;
+        }
+        colorCounters[color][category] += colorCategoryCounts[key];
+    });
+
+    // Then, create and append the counters
+    Object.keys(colorCounters).forEach(color => {
+        const counterSpan = document.createElement('span');
+        counterSpan.classList.add('color-counter');
+        const colorClass = color.startsWith('account') ? color : `account${color}`;
+        counterSpan.classList.add(colorClass);
+
+        let counterText = `${color}: `;
+        
+        // Aggregate house and crown counts
+        const houseCrownCount = (colorCounters[color]['house'] || 0) + (colorCounters[color]['crown'] || 0);
+        counterText += `${houseCrownCount} | `;
+
+        // Add counts for other categories
+        const categories = ['laboratory', 'pet', 'worker'];
+        categories.forEach(category => {
+            const count = colorCounters[color][category] || 0;
+            counterText += `${count} | `;
+        });
+
+        // Remove the trailing separator
+        counterText = counterText.slice(0, -3);
+        counterSpan.textContent = counterText;
+
+        countersContainer.appendChild(counterSpan);
     });
 }
-
