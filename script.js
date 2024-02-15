@@ -65,6 +65,8 @@ function addTimer() {
 
 function updateNearestTimerDisplay() {
     const timers = Array.from(document.querySelectorAll('.timer'));
+    let nearestTime = null; // Declare nearestTime with initial value null
+
     if (timers.length > 0) {
         // Sort timers by their end time in ascending order
         timers.sort((a, b) => parseInt(a.getAttribute('data-end-time')) - parseInt(b.getAttribute('data-end-time')));
@@ -80,11 +82,12 @@ function updateNearestTimerDisplay() {
             const endTime = parseInt(nearestTimer.getAttribute('data-end-time'));
             const timeLeft = endTime - now;
             // Ensure nearestTime is set properly for the updateTabTitle function
-            nearestTime = Math.floor(timeLeft/1000);
+            nearestTime = Math.floor(timeLeft / 1000); // Convert milliseconds to seconds
         }
     }
 
-    // Update the tab title with the nearest time (in milliseconds) or null if no active timers
+    // Assuming finishedTimersCount is calculated and updated elsewhere in your code
+    // Update the tab title with the nearest time (in seconds) or null if no active timers
     updateTabTitle(nearestTime, finishedTimersCount);
 }
 
@@ -166,7 +169,6 @@ function createTimerElement(endTime, color, icon) {
 
     // Append the timer to the list
     timersList.appendChild(timerElement);
-  
  
     // Store the formatted completion time in a data attribute	
 	timerElement.setAttribute('data-end-time', endTime.toString());
