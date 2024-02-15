@@ -325,13 +325,29 @@ function formatTime(seconds) {
     seconds -= minutes * 60;
 
     let timeString = '';
-    if (days > 0) timeString += days + 'd ';
-    if (hours > 0) timeString += hours + 'h ';
-    if (minutes > 0) timeString += minutes + 'm ';
-    timeString += seconds + 's';
+    let unitsAdded = 0;
 
-    return timeString;
+    if (days > 0) {
+        timeString += days + 'd ';
+        unitsAdded++;
+    }
+    if (hours > 0 && unitsAdded < 2) {
+        timeString += hours + 'h ';
+        unitsAdded++;
+    }
+    if (minutes > 0 && unitsAdded < 2) {
+        timeString += minutes + 'm ';
+        unitsAdded++;
+    }
+    if (seconds > 0 && unitsAdded < 2) {
+        timeString += seconds + 's';
+        unitsAdded++;
+    }
+
+    // Trim trailing space if it exists
+    return timeString.trim();
 }
+
 
 function updateTabTitle(nearestTimeSeconds, finishedCount) {
     if (finishedCount > 0) {
