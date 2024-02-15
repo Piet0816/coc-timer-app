@@ -192,6 +192,7 @@ function createTimerElement(seconds, color, icon) {
 
 
 function exportToJson() {
+	saveTimersState();
     // Retrieve the timers data from localStorage
     const timersData = localStorage.getItem('timers'); // Replace 'timers' with your actual localStorage key
     // Set the data to the textarea
