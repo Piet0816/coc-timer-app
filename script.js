@@ -37,6 +37,7 @@ function toggleCompletedHeader() {
 }
 
 function addTimer() {
+	
     const days = parseInt(document.getElementById('daysInput').value) || 0;
     const hours = parseInt(document.getElementById('hoursInput').value) || 0;
     const minutes = parseInt(document.getElementById('minutesInput').value) || 0;
@@ -45,7 +46,8 @@ function addTimer() {
     const totalSeconds = (days * 24 * 60 * 60) + (hours * 60 * 60) + (minutes * 60);
 
     if (totalSeconds > 0) {
-        createTimerElement(totalSeconds, color, icon);
+        const endTime = Date.now() + (totalSeconds * 1000);
+        createTimerElement(endTime, color, icon);
     } else {
         alert("Please enter a valid time greater than 0.");
     }
@@ -63,22 +65,31 @@ function addTimer() {
 
 function updateNearestTimerDisplay() {
     const timers = Array.from(document.querySelectorAll('.timer'));
-    let nearestTime = null;
-
     if (timers.length > 0) {
-        // Find the smallest time remaining
-        nearestTime = timers.reduce((min, timer) => {
-            const seconds = parseInt(timer.getAttribute('data-seconds'), 10);
-            return seconds < min ? seconds : min;
-        }, Number.MAX_SAFE_INTEGER);
+        // Sort timers by their end time in ascending order
+        timers.sort((a, b) => parseInt(a.getAttribute('data-end-time')) - parseInt(b.getAttribute('data-end-time')));
+
+        // Get the current time
+        const now = Date.now();
+        
+        // Find the nearest timer that has not yet finished
+        const nearestTimer = timers.find(timer => parseInt(timer.getAttribute('data-end-time')) > now);
+        
+        // If there's a nearest active timer, calculate the time remaining
+        if (nearestTimer) {
+            const endTime = parseInt(nearestTimer.getAttribute('data-end-time'));
+            const timeLeft = endTime - now;
+            // Ensure nearestTime is set properly for the updateTabTitle function
+            nearestTime = Math.floor(timeLeft/1000);
+        }
     }
 
-    // Update the tab title with the nearest time or the finished count
+    // Update the tab title with the nearest time (in milliseconds) or null if no active timers
     updateTabTitle(nearestTime, finishedTimersCount);
 }
 
 
-function createTimerElement(seconds, color, icon) {
+function createTimerElement(endTime, color, icon) {
 
     const timersList = document.getElementById('timersList');
     const timerElement = document.createElement('div');
@@ -146,22 +157,19 @@ function createTimerElement(seconds, color, icon) {
     // Append the remove button to the timer element
     timerElement.appendChild(removeButton);
 
-	const completionTime = new Date(Date.now() + seconds * 1000);
-	const options = { weekday: 'short', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' };
-	completionTimeElement.textContent = `${completionTime.toLocaleString(undefined, options)}`;
+	// Convert endTime to a Date object for formatting
+    const completionDate = new Date(endTime);
+    // Format the completion time for display
+    const options = { weekday: 'short', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit', timeZoneName: 'short' };
+    completionTimeElement.textContent = completionDate.toLocaleString(undefined, options);
+
 
     // Append the timer to the list
     timersList.appendChild(timerElement);
-
-    // Start the countdown
-    const startTime = Date.now();
-    const endTime = startTime + (seconds * 1000);
-
-    // Store the formatted completion time in a data attribute
-    timerElement.setAttribute('data-completion-time', completionTime.toLocaleString());
-	
-	timerElement.setAttribute('data-start-time', startTime.toString());
-    timerElement.setAttribute('data-seconds', seconds.toString());
+  
+ 
+    // Store the formatted completion time in a data attribute	
+	timerElement.setAttribute('data-end-time', endTime.toString());
     timerElement.setAttribute('data-color', color);
     timerElement.setAttribute('data-icon', icon);
 	
@@ -183,7 +191,6 @@ function createTimerElement(seconds, color, icon) {
 			moveToCompleted(timerElement, color, icon);
 			updateNearestTimerDisplay(); // Add this line
 		} else {
-			timerElement.setAttribute('data-seconds', remainingSeconds); // Add this line
 			updateNearestTimerDisplay(); // Add this line
 		}
      
@@ -235,10 +242,8 @@ function sortTimersByRemainingTime() {
     const timerElements = Array.from(timersList.querySelectorAll('.timer'));
 
     // Sort timer elements by remaining time
-    timerElements.sort((a, b) => {
-        const remainingTimeA = parseInt(a.getAttribute('data-seconds'));
-        const remainingTimeB = parseInt(b.getAttribute('data-seconds'));
-        return remainingTimeA - remainingTimeB;
+	timerElements.sort((a, b) => {
+            return parseInt(a.getAttribute('data-end-time')) - parseInt(b.getAttribute('data-end-time'));
     });
 
     // Remove all timer elements from the list
@@ -325,11 +330,11 @@ function formatTime(seconds) {
     return timeString;
 }
 
-function updateTabTitle(nearestTime, finishedCount) {
+function updateTabTitle(nearestTimeSeconds, finishedCount) {
     if (finishedCount > 0) {
         document.title = `${finishedCount} tasks finished`;
     } else if (nearestTime) {
-        document.title = `Next: ${formatTime(nearestTime)}`;
+        document.title = `Next: ${formatTime(nearestTimeSeconds)}`;
     } else {
         document.title = "CoC Timer";
     }
@@ -346,8 +351,7 @@ function resetTabTitleIfNoTimers() {
 function saveTimersState() {
     const timers = Array.from(document.querySelectorAll('.timer')).map(timer => {
         return {
-            startTime: timer.getAttribute('data-start-time'),
-            seconds: timer.getAttribute('data-seconds'),         
+            endTime: timer.getAttribute('data-end-time'),                   
             color: timer.getAttribute('data-color'),
             icon: timer.getAttribute('data-icon') // This should be the key for the icon
         };
@@ -361,10 +365,13 @@ function loadTimersState() {
     const savedTimers = JSON.parse(localStorage.getItem('timers')) || [];
     savedTimers.forEach(savedTimer => {
         const now = Date.now();
-        const elapsed = (now - parseInt(savedTimer.startTime)) / 1000;
-        const remainingSeconds = Math.max(0, parseInt(savedTimer.seconds) - elapsed);
+        const endTime = parseInt(savedTimer.endTime);
+        const remainingSeconds = Math.max(0, endTime - now);
+		
+		console.log('Load Timers:', savedTimer, remainingSeconds);
+		
         if (remainingSeconds > 0) {
-            createTimerElement(remainingSeconds, savedTimer.color, savedTimer.icon); // 'savedTimer.icon' is the key
+            createTimerElement(parseInt(savedTimer.endTime), savedTimer.color, savedTimer.icon); // 'savedTimer.icon' is the key
             // After creating the timer, you may need to update its progress bar and other attributes
         }else {
             // Timer has expired, move directly to completed
