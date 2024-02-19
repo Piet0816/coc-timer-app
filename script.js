@@ -269,9 +269,12 @@ function moveToCompleted(timerElement, color, icon) {
     completedContainer.classList.add('completed-timer');
     completedContainer.setAttribute('data-color', color); // Set the color attribute for styling
 
+	const endTime = parseInt(timerElement.getAttribute('data-end-time'));
+	
+
     // Create a span to display the completion text
     const completionText = document.createElement('span');
-    completionText.textContent = `Completed at: ${new Date().toLocaleTimeString()} Base: ${color}   `;
+    completionText.textContent = `Completed at: ${new Date(endTime).toLocaleString()} Base: ${color}   `;
 
     // Add the existing icon from the timer to the completed container
     const iconElement = timerElement.querySelector('.icon').cloneNode(true);
@@ -303,7 +306,7 @@ function moveToCompleted(timerElement, color, icon) {
     timerElement.remove();
 	
 		const beepSound = new Audio('./audio/beep.mp3'); 
-		beepSound.play();
+		beepSound.play().catch(error => console.error("Error playing the sound:", error));
 		
 		toggleCompletedHeader();
 }
@@ -400,6 +403,7 @@ function loadTimersState() {
             dummyTimerElement.classList.add('timer');
             dummyTimerElement.setAttribute('data-color', savedTimer.color);
             dummyTimerElement.setAttribute('data-icon', savedTimer.icon);
+			dummyTimerElement.setAttribute('data-end-time', savedTimer.endTime);
 
             // Create a dummy icon element for visual consistency in completed section
            const iconElement = document.createElement('img');
