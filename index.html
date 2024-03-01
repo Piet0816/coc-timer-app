@@ -45,7 +45,33 @@
 	<div id="colorCountersContainer"></div>
     <!-- Special Buttons and JSON TextField -->
     <div id="specialButtonsContainer" style="display: none;">
-	     <button id="resetButton" onclick="resetAndDeleteSave()">Reset All</button>
+		<div id="boostOptionsContainer">
+			<select id="boostSelect">
+				<option value="house-10-3600">MainBase 1h - 10x</option>
+				<option value="laboratory-24-3600">Laboratory 1h - 24x</option>
+				<option value="pet-24-3600">Pet 1h - 24x</option>
+				<option value="worker-10-1920">Builders Base 32min - 10x</option>
+			</select>
+			<!-- Copy of the account selection combobox -->
+			<select id="boostAccountSelect">		
+				<option value="account0">Account 0</option>
+				<option value="account1">Account 1</option>
+				<option value="account2">Account 2</option>
+				<option value="account3">Account 3</option>
+				<option value="account4">Account 4</option>
+				<option value="account5">Account 5</option>
+				<option value="account6">Account 6</option>
+				<option value="account7">Account 7</option>
+				<option value="account8">Account 8</option>
+				<option value="account9">Account 9</option>
+				<option value="0814">0814</option>
+				<option value="0816">0816</option>
+				<option value="0817">0817</option>
+				<option value="0818">0818</option>
+			</select>
+			<button id="applyBoost">Apply Boost</button>
+		</div>
+	    <button id="resetButton" onclick="resetAndDeleteSave()">Reset All</button>
         <button id="getJsonButton" onclick="exportToJson()">Export Data</button>
         <button id="setJsonButton" onclick="importFromJson()">Import Data</button>
         <textarea id="jsonTextField" placeholder="JSON data..."></textarea>

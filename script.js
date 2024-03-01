@@ -177,8 +177,12 @@ function createTimerElement(endTime, color, icon) {
     timerElement.setAttribute('data-icon', icon);
 	
     const interval = setInterval(() => {
-        const currentTime = Date.now();
-        const remainingTime = endTime - currentTime;
+		
+		const endTimeAttr = timerElement.getAttribute('data-end-time');
+		const actualEndTime = parseInt(endTimeAttr, 10);
+        
+		const currentTime = Date.now();
+        const remainingTime = actualEndTime - currentTime;
         const remainingSeconds = Math.max(0, Math.floor(remainingTime / 1000));
         const percentage = Math.max(0, (remainingTime / (maxBarSeconds * 1000)) * 100);
 
@@ -511,4 +515,63 @@ function updateColorCounters() {
 
         countersContainer.appendChild(counterSpan);
     });
+}
+
+function parseBoostOption(value) {
+    const parts = value.split('-');
+    return {
+        category: parts[0],
+        multiplier: parseInt(parts[1], 10),
+        durationInSeconds: parseInt(parts[2], 10),
+    };
+}
+
+document.getElementById('applyBoost').addEventListener('click', function() {
+    const boostValue = document.getElementById('boostSelect').value;
+    const boost = parseBoostOption(boostValue);
+    const selectedAccount = document.getElementById('boostAccountSelect').value;
+
+    applyBoostToTimers(boost, selectedAccount);
+});
+
+function applyBoostToTimers(boost, account) {
+	
+    const timers = Array.from(document.querySelectorAll('.timer'));
+    timers.forEach(timer => {
+        const timerAccount = timer.getAttribute('data-color');
+        const timerCategory = timer.getAttribute('data-icon');
+		console.log("t1");
+        if (timerAccount === account && timerCategory === boost.category) {
+            adjustTimerEndTime(timer, boost);
+        }
+    });
+	saveTimersState();
+}
+
+function adjustTimerEndTime(timer, boost) {
+    const isAlreadyBoosted = timer.getAttribute('data-boosted') === 'true';
+    if (isAlreadyBoosted) {
+        console.log("This timer has already been boosted to its limit and will not change.");
+        return; // Skip further processing for this timer
+    }
+
+    const endTime = parseInt(timer.getAttribute('data-end-time'), 10);
+    const now = Date.now();
+    const remainingTime = endTime - now;
+    const boostEffectInSeconds = boost.durationInSeconds * (boost.multiplier - 1);
+    let boostedRemainingTime = remainingTime - (boostEffectInSeconds * 1000); // Convert to milliseconds
+
+    if (boostedRemainingTime < 0) {
+        // Calculate how much real-time should represent the boosted duration
+        let realTimeDurationOfBoost = (remainingTime / 1000) / boost.multiplier;
+        boostedRemainingTime = realTimeDurationOfBoost * 1000; // Convert back to milliseconds
+        timer.setAttribute('data-boosted', 'true'); // Mark the timer as boosted to its limit
+    }
+
+    const newEndTime = now + boostedRemainingTime;
+
+    console.log("Original End Time:", new Date(endTime).toLocaleString());
+    console.log("New End Time:", new Date(newEndTime).toLocaleString());
+
+    timer.setAttribute('data-end-time', newEndTime.toString());
 }
